@@ -11,17 +11,17 @@ from operator import methodcaller
 
 def func_naver_search(title):
 
-    encode_bytes = title.encode('euc-kr')
+    encode_bytes = title
 
     idx = 0
 
-    encode_title = ''
+    encode_title = title
 
-    while idx < len(encode_bytes):
-        hex_code = hex(encode_bytes[idx])
-        encode_title += '%'
-        encode_title += str(hex_code)[2:]
-        idx += 1
+    #while idx < len(encode_bytes):
+    #    hex_code = hex(encode_bytes[idx])
+    #    encode_title += '%'
+    #    encode_title += str(hex_code)[2:]
+    #    idx += 1
 
     print(encode_title)
 
