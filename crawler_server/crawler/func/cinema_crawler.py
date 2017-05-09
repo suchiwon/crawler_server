@@ -61,6 +61,10 @@ class Crawler:
     def makeJson(self, provision):
         return json.dumps(provision, default=methodcaller("json"), ensure_ascii=False)
 
+    def getTagList(self, soup, tag):
+        list = soup.get(tag)
+        return list
+
     def makeCommentsProvision(self, url, soup, 
                               cinema_point_tag, user_id_tag, review_tag, user_point_tag, datetime_tag,
                               point_idx_offset, point_div):

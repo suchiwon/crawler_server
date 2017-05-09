@@ -56,3 +56,10 @@ def cgv_search_request(request):
 
     print(title)
     return HttpResponse( cgv_search.func_cgv_search(title) )
+
+def naver_search_one_cinema_request(request):
+    print(request)
+    
+    url = str(request.GET.get('redirect_url'))
+
+    return HttpResponse( naver_search.func_naver_search_one_cinema(url) )

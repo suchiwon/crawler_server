@@ -72,3 +72,52 @@ def func_naver_search(search_word, start_page, end_page):
     print("NAVER SEARCH END")
 
     return json_list
+
+def func_naver_search_one_cinema(redirect_url):
+    crawler_instance = cinema_crawler.Crawler('http://movie.naver.com/',
+                                            'movie/search/result.nhn?section=movie&query=',
+                                            '')
+
+    try:
+        soup = crawler_instance.setSoup(redirect_url, False)
+
+        #provision = crawler_instance.makeCommentsProvision(redirect_url, soup, 'div.star_score > em', 'div.score_reple > dl > dt > em',
+        #                                                   'div.score_reple > p',
+        #                                                   'div.star_score > em','div.score_reple > dl > dt > em', 2, 1)
+
+        cinema_point_list = soup.select('div.star_score > em')
+        user_point_list = soup.select('div.star_score > em')
+        user_id_list = soup.select('div.score_reple > dl > dt > em > a > span')
+        review_list = soup.select('div.score_reple > p')
+        datetime_list = soup.select('div.score_reple > dl > dt > em')
+
+        cinema_point = 0
+
+        if len(cinema_point_list) > 0:
+            cinema_point = float(cinema_point_list[8].get_text().strip())
+            print(cinema_point)
+
+        idx = 0
+
+        total_comment_list = []
+
+        while idx < len(user_id_list):
+            user_point = user_point_list[idx + 10].get_text()
+            user_id = user_id_list[idx].get_text().strip()
+            review = review_list[idx].get_text().strip()
+            datetime = datetime_list[idx * 2 + 1].get_text().strip()
+
+            total_comment_list.append(cinema.Comment(user_id, review, user_point, datetime))
+
+            idx += 1
+
+        commentsProvision = cinema.CommentsProvision(redirect_url, cinema_point, total_comment_list)
+                                            
+        json_list = crawler_instance.makeJson(commentsProvision)
+        print("NAVER SEARCH END")
+        return json_list
+
+    except Exception as e:
+        raise e
+
+    print("NAVER SEARCH FAILED")
