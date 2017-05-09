@@ -16,6 +16,7 @@ def func_naver_search(title, start_page, end_page):
     idx = 0
 
     encode_title = title
+    #encode_title = ''
 
     #while idx < len(encode_bytes):
     #    hex_code = hex(encode_bytes[idx])
@@ -23,7 +24,7 @@ def func_naver_search(title, start_page, end_page):
     #    encode_title += str(hex_code)[2:]
     #    idx += 1
 
-    print(encode_title)
+    #print(encode_title)
 
     i = start_page
     title_list_saver = []
@@ -54,6 +55,8 @@ def func_naver_search(title, start_page, end_page):
             title_list = soup.select('ul.search_list_1 > li > dl > dt > a')
             point_list = soup.select('em.num')
             cuser_cnt_list = soup.select('em.cuser_cnt')
+            etc_list = soup.select('dd.etc')
+            image_url_list = soup.select('p.result_thumb > a > img')
 
             if title_list == title_list_saver:
                 break
@@ -65,10 +68,13 @@ def func_naver_search(title, start_page, end_page):
                 title = title_list[idx].get_text()
                 point = float(point_list[idx].get_text())
                 cuser_cnt = int(cuser_cnt_list[idx].get_text()[4:-2])
+                info = etc_list[2 * idx].get_text()
+                actor_info = etc_list[2 * idx + 1].get_text()
+                image_url = image_url_list[idx].get('src')
 
 
                 if cuser_cnt > 0:
-                    total_title_list.append(cinema.Cinema(title, point, cuser_cnt))
+                    total_title_list.append(cinema.Cinema(title, point, cuser_cnt, info, actor_info, image_url))
                 #print(title)
 
                 idx = idx + 1
