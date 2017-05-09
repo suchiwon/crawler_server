@@ -5,11 +5,9 @@ import requests
 import lxml
 
 from bs4 import BeautifulSoup
-from cinema import cinema
 
-def cgv_search(movie_name):
+def func_cgv_search(movie_name):
 
-    movie_name = '¹üÁË¿ÍÀÇ ÀüÀï : ³ª»Û³ðµé Àü¼º½Ã´ë'
     name_utf = movie_name.encode('utf8')
 
     base_url = 'http://www.cgv.co.kr'
@@ -22,6 +20,8 @@ def cgv_search(movie_name):
     source_code = requests.get(uri)
 
     plain_text = source_code.text
+
+    point = 0
 
     try:
         soup = BeautifulSoup(plain_text, 'lxml')
@@ -50,4 +50,6 @@ def cgv_search(movie_name):
 
     print("CGV SEARCH END")
 
-cgv_search(sys.argv[0])
+    return point
+
+#cgv_search(sys.argv[0])

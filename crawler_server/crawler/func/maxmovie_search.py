@@ -5,11 +5,9 @@ import requests
 import lxml
 
 from bs4 import BeautifulSoup
-from cinema import cinema
 
-def maxmovie_search(movie_name):
+def func_maxmovie_search(movie_name):
 
-    movie_name = '¹üÁË¿ÍÀÇ ÀüÀï : ³ª»Û³ðµé Àü¼º½Ã´ë'
     name_utf = movie_name.encode('utf8')
 
     uri = 'http://search.maxmovie.com/search?sword='
@@ -20,6 +18,8 @@ def maxmovie_search(movie_name):
     source_code = requests.get(uri)
 
     plain_text = source_code.text
+
+    point = 0
 
     try:
         soup = BeautifulSoup(plain_text, 'lxml')
@@ -37,4 +37,6 @@ def maxmovie_search(movie_name):
 
     print("MAXMOVIE SEARCH END")
 
-maxmovie_search(sys.argv[0])
+    return point
+
+#maxmovie_search(sys.argv[0])

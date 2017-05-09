@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import cinema
 from operator import methodcaller
 
-def func_naver_search(title):
+def func_naver_search(title, start_page, end_page):
 
     encode_bytes = title
 
@@ -25,7 +25,7 @@ def func_naver_search(title):
 
     print(encode_title)
 
-    i = 1
+    i = start_page
     title_list_saver = []
 
     total_title_list = []
@@ -77,6 +77,10 @@ def func_naver_search(title):
             raise e
 
         i = i + 1
+
+        if (i > end_page):
+            break
+
         title_list_saver = title_list
 
     total_title_list.sort(reverse=True, key = cinema.Cinema.getKey)
