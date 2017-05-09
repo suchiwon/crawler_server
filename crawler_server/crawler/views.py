@@ -24,7 +24,7 @@ def naver_search_request(request):
     start_page = int(test)
     end_page = int(request.GET.get('end_page'))
 
-    title = str(request).split('=')[1].split('\'')[0]
+    title = str(request).split('=')[1].split('&')[0]
 
 
 

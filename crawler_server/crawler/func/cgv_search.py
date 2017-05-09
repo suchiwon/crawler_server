@@ -42,7 +42,7 @@ def func_cgv_search(movie_name):
         point_list = soup.select('span.percent')
 
         if (len(point_list) > 0):
-            point = float(point_list[0].get_text()[:-2])/100.0
+            point = float(point_list[0].get_text()[:-2])/10.0
             print(point)
 
     except Exception as e:
