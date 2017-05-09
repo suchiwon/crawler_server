@@ -1,42 +1,34 @@
 #-*- coding: euc-kr -*-
 
-import sys
-import requests
-import lxml
-
-from bs4 import BeautifulSoup
+import cinema_crawler
+import cinema
 
 def func_maxmovie_search(movie_name):
 
-    name_utf = movie_name.encode('utf8')
+    crawler_instance = cinema_crawler.Crawler('http://search.maxmovie.com',
+                                              '/search?sword=',
+                                              movie_name)
 
-    uri = 'http://search.maxmovie.com/search?sword='
-    uri = uri + movie_name
-
-    print(uri)
-
-    source_code = requests.get(uri)
-
-    plain_text = source_code.text
-
-    point = 0
+    print(crawler_instance.getPullUrl())
 
     try:
-        soup = BeautifulSoup(plain_text, 'lxml')
+        redirect_url = crawler_instance.getRedirctUrl('p.sage > a.ag_4', False, False)
 
-        #print(soup)
+        soup = crawler_instance.setSoup(redirect_url, False)
 
-        point_list = soup.select('span.sstar')
+        provision = crawler_instance.makeCommentsProvision(redirect_url, soup, 'div.myDetailTex_point > font.font_rdB.b',
+                                                           'div#content-center > table . tbody > tr > td > font',
+                                                           'div#content-center > table . tbody > tr > td > a > font',
+                                                           'div#content-center > table . tbody > tr > td > a > font.font_or'
+                                                           ,'div#content-center > table . tbody > tr > td.font_br.s',
+                                                           2, 1)
+                                    
+        json_list = crawler_instance.makeJson(provision)
+        print("MAXMOVIE SEARCH END")
+        return json_list
 
-        if len(point_list) > 0:
-            point = float(point_list[0].get_text())
-            print(point)
 
     except Exception as e:
         raise e
 
-    print("MAXMOVIE SEARCH END")
-
-    return point
-
-#maxmovie_search(sys.argv[0])
+    print("MAXMOVIE SEARCH FAILED")

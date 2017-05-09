@@ -1,10 +1,7 @@
 #-*- coding: euc-kr -*-
 
-import sys
-import requests
-import lxml
-
-from bs4 import BeautifulSoup
+import cinema_crawler
+import cinema
 
 def func_cgv_search(movie_name):
 
