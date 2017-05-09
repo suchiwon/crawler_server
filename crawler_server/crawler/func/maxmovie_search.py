@@ -16,7 +16,7 @@ def func_maxmovie_search(movie_name):
 
         soup = crawler_instance.setSoup(redirect_url, True)
 
-        print(soup)
+        #print(soup)
 
         #provision = crawler_instance.makeCommentsProvision(redirect_url, soup, 'div.myDetailTex_point > font.font_rdB b',
         #                                                   'div#content-center > table > tbody > tr > td > font',
@@ -57,7 +57,6 @@ def func_maxmovie_search(movie_name):
         json_list = crawler_instance.makeJson(commentsProvision)
         print("MAXMOVIE SEARCH END")
         return json_list
-
 
     except Exception as e:
         raise e

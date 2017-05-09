@@ -17,13 +17,12 @@ def func_daum_search(movie_name):
 
         soup = crawler_instance.setSoup(redirect_url, True)
 
-        provision = crawler_instance.makeCommentsProvision('daum', redirect_url, soup, 'em.emph_grade', 'em.link_profile', 'p.desc_review',
+        commentsProvision = crawler_instance.makeCommentsProvision('daum', redirect_url, soup, 'em.emph_grade', 'em.link_profile', 'p.desc_review',
                                                            'em.emph_grade','span.info_append', 2, 1)
                                     
-        json_list = crawler_instance.makeJson(provision)
+        json_list = crawler_instance.makeJson(commentsProvision)
         print("DAUM SEARCH END")
-        return json_list
-
+        return json_list       
 
     except Exception as e:
         raise e

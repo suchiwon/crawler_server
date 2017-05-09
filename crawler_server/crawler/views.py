@@ -67,15 +67,22 @@ def naver_search_one_cinema_request(request):
     return HttpResponse( naver_search.func_naver_search_one_cinema(url) )
 
 def comment_search_request(request):
-    comment_result_list = []
+ 
+    #comment_result_list = []
+    comment_result_list = '['
 
     title = bytes(request.GET.get('title'),'utf-8').decode('utf-8')
     redirect_url = request.GET.get('redirectURL')
 
-    comment_result_list.append( naver_search.func_naver_search_one_cinema(redirect_url) )
-    comment_result_list.append( daum_search.func_daum_search(title) )
-    comment_result_list.append( maxmovie_search.func_maxmovie_search(title) )
-    comment_result_list.append( cgv_search.func_cgv_search(title) )
+    comment_result_list += naver_search.func_naver_search_one_cinema(redirect_url)
+    comment_result_list += ','
+    comment_result_list += daum_search.func_daum_search(title)
+    comment_result_list += ','
+    comment_result_list += maxmovie_search.func_maxmovie_search(title)
+    comment_result_list += ','
+    comment_result_list += cgv_search.func_cgv_search(title)
+    comment_result_list += ']'
 
     #json_list = json.dumps(comment_result_list, default=methodcaller("json"), ensure_ascii=False)
     return HttpResponse( comment_result_list )
+    #return HttpResponse( json_list )

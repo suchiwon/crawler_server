@@ -16,7 +16,7 @@ def func_cgv_search(movie_name):
 
         soup = crawler_instance.setSoup(redirect_url, True)
 
-        print(soup)
+        #print(soup)
         
         cinema_point_list = soup.select('span.percent')
         user_id_list = soup.select('a.commentMore')
@@ -47,7 +47,6 @@ def func_cgv_search(movie_name):
         json_list = crawler_instance.makeJson(commentsProvision)
         print("MAXMOVIE SEARCH END")
         return json_list
-
 
     except Exception as e:
         raise e
