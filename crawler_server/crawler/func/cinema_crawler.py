@@ -65,7 +65,7 @@ class Crawler:
         list = soup.get(tag)
         return list
 
-    def makeCommentsProvision(self, url, soup, 
+    def makeCommentsProvision(self, site_type, url, soup, 
                               cinema_point_tag, user_id_tag, review_tag, user_point_tag, datetime_tag,
                               point_idx_offset, point_div):
         cinema_point_list = soup.select(cinema_point_tag)
@@ -94,6 +94,6 @@ class Crawler:
 
             idx += 1
 
-        commentsProvision = cinema.CommentsProvision(url, cinema_point, total_comment_list)
+        commentsProvision = cinema.CommentsProvision(site_type, url, cinema_point, total_comment_list)
 
         return commentsProvision

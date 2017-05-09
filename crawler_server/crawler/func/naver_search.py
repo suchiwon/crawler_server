@@ -111,7 +111,7 @@ def func_naver_search_one_cinema(redirect_url):
 
             idx += 1
 
-        commentsProvision = cinema.CommentsProvision(redirect_url, cinema_point, total_comment_list)
+        commentsProvision = cinema.CommentsProvision('naver', redirect_url, cinema_point, total_comment_list)
                                             
         json_list = crawler_instance.makeJson(commentsProvision)
         print("NAVER SEARCH END")

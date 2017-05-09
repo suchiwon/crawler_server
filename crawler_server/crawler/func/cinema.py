@@ -54,7 +54,8 @@ class Comment(JSONEncodable):
                                         self.datetime)
 
 class CommentsProvision(JSONEncodable):
-    def __init__(self, url, point, comments):
+    def __init__(self, site_type, url, point, comments):
+        self.site_type = site_type
         self.url =  url
         self.point = point
         self.comments = comments                          

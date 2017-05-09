@@ -26,11 +26,11 @@ def func_maxmovie_search(movie_name):
         #                                                   0, 1)
         
         
-        cinema_point_list = soup.select('div.myDetailTex_point > font.font_rdB b')
-        user_point_list = soup.findAll('div#content-center > table > tbody > tr > td > font')
-        user_id_list = soup.findAll('div#content-center > table > tbody > tr > td > a > font')
-        review_list = soup.findAll('div#content-center > table > tbody > tr > td > a > font.font_or')
-        datetime_list = soup.findAll('div#content-center > table > tbody > tr > td.font_br.s')
+        cinema_point_list = soup.select('div.myDetailTxt_point > font.font_rdB.b')
+        user_point_list = soup.select('div#content-center > table > tbody > tr > td > a > font.font_or')
+        user_id_list = soup.select('div#content-center > table > tbody > tr > td > font')
+        review_list = soup.select('div#content-center > table > tbody > tr > td > a > font')
+        datetime_list = soup.select('div#content-center > table > tbody > tr > td.font_br.s')
 
         cinema_point = 0
 
@@ -43,16 +43,16 @@ def func_maxmovie_search(movie_name):
         total_comment_list = []
 
         while idx < len(user_id_list):
-            user_point = user_point_list[idx + point_idx_offset].get_text()
+            user_point = user_point_list[idx].get_text()
             user_id = user_id_list[idx].get_text()
-            review = review_list[idx * 2].get_text().strip()
+            review = review_list[idx * 2 + 1].get_text().strip()
             datetime = datetime_list[idx].get_text().strip()
 
             total_comment_list.append(cinema.Comment(user_id, review, user_point, datetime))
 
             idx += 1
 
-        commentsProvision = cinema.CommentsProvision(redirect_url, cinema_point, total_comment_list)
+        commentsProvision = cinema.CommentsProvision('maxmovie', redirect_url, cinema_point, total_comment_list)
                                     
         json_list = crawler_instance.makeJson(commentsProvision)
         print("MAXMOVIE SEARCH END")

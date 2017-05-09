@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from urllib.parse import quote
 import sys
 import os
+import json
+from operator import methodcaller
 
 base_path = os.path.dirname( os.path.abspath( __file__ ) )
 
@@ -22,7 +24,7 @@ def naver_search_request(request):
     start_page = int(request.GET.get('start_page')) if request.GET.get('start_page') else 1
     end_page = int(request.GET.get('end_page')) if request.GET.get('end_page') else start_page
 
-    title = str(request).split('=')[1].split('&')[0]
+    title = bytes(request.GET.get('title'),'utf-8').decode('utf-8')
 
     if (start_page <= 0):
         start_pqge = 1
@@ -63,3 +65,17 @@ def naver_search_one_cinema_request(request):
     url = str(request.GET.get('redirect_url'))
 
     return HttpResponse( naver_search.func_naver_search_one_cinema(url) )
+
+def comment_search_request(request):
+    comment_result_list = []
+
+    title = bytes(request.GET.get('title'),'utf-8').decode('utf-8')
+    redirect_url = request.GET.get('redirectURL')
+
+    comment_result_list.append( naver_search.func_naver_search_one_cinema(redirect_url) )
+    comment_result_list.append( daum_search.func_daum_search(title) )
+    comment_result_list.append( maxmovie_search.func_maxmovie_search(title) )
+    comment_result_list.append( cgv_search.func_cgv_search(title) )
+
+    #json_list = json.dumps(comment_result_list, default=methodcaller("json"), ensure_ascii=False)
+    return HttpResponse( comment_result_list )

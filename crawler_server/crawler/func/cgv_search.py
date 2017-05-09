@@ -5,48 +5,53 @@ import cinema
 
 def func_cgv_search(movie_name):
 
-    name_utf = movie_name.encode('utf8')
+    crawler_instance = cinema_crawler.Crawler('http://www.cgv.co.kr',
+                                              '/search/?query=',
+                                              movie_name)
 
-    base_url = 'http://www.cgv.co.kr'
-
-    uri = 'http://www.cgv.co.kr/search/?query='
-    uri = uri + movie_name
-
-    #print(uri)
-
-    source_code = requests.get(uri)
-
-    plain_text = source_code.text
-
-    point = 0
+    print(crawler_instance.getPullUrl())
 
     try:
-        soup = BeautifulSoup(plain_text, 'lxml')
+        redirect_url = crawler_instance.getRedirctUrl('div.box-contents > a', False, True)
 
-        #print(soup)
+        soup = crawler_instance.setSoup(redirect_url, True)
 
-        redirect_list = soup.select('div.box-contents > a')
+        print(soup)
+        
+        cinema_point_list = soup.select('span.percent')
+        user_id_list = soup.select('a.commentMore')
+        review_list = soup.select('div.box-comment > p')
+        datetime_list = soup.select('span.day')
 
-        if len(redirect_list) > 0:
-            re_url = redirect_list[0]['href']
-            print(base_url + re_url)
+        cinema_point = 0
 
-        source_code = requests.get(base_url + re_url)
-        plain_text = source_code.text
+        if len(cinema_point_list) > 0:
+            cinema_point = float(cinema_point_list[0].get_text().strip()[:-1])/10
+            print(cinema_point)
 
-        soup = BeautifulSoup(plain_text, 'lxml')
+        idx = 0
 
-        point_list = soup.select('span.percent')
+        total_comment_list = []
 
-        if (len(point_list) > 0):
-            point = float(point_list[0].get_text()[:-2])/10.0
-            print(point)
+        while idx < len(user_id_list):
+            user_id = user_id_list[idx].get_text()
+            review = review_list[idx].get_text().strip()
+            datetime = datetime_list[idx].get_text().strip()
+
+            total_comment_list.append(cinema.Comment(user_id, review, 0, datetime))
+
+            idx += 1
+
+        commentsProvision = cinema.CommentsProvision('cgv', redirect_url, cinema_point, total_comment_list)
+                                    
+        json_list = crawler_instance.makeJson(commentsProvision)
+        print("MAXMOVIE SEARCH END")
+        return json_list
+
 
     except Exception as e:
         raise e
 
-    print("CGV SEARCH END")
-
-    return point
+    print("MAXMOVIE SEARCH FAILED")
 
 #cgv_search(sys.argv[0])
