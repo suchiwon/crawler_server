@@ -19,20 +19,16 @@ def naver_search_request(request):
 
     print(request)
 
-    test = request.GET.get('start_page')
-
-    start_page = int(test)
-    end_page = int(request.GET.get('end_page'))
+    start_page = int(request.GET.get('start_page')) if request.GET.get('start_page') else 1
+    end_page = int(request.GET.get('end_page')) if request.GET.get('end_page') else start_page
 
     title = str(request).split('=')[1].split('&')[0]
-
-
 
     if (start_page <= 0):
         start_pqge = 1
 
-    if (end_page <= 0):
-        end_page = 1
+    if (end_page < start_page):
+        end_page = start_page
 
     return HttpResponse( naver_search.func_naver_search(title, start_page, end_page) )
 

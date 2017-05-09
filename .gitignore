@@ -1,0 +1,27 @@
+# Created by https://www.gitignore.io/api/django
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+media
+
+# End of https://www.gitignore.io/api/django
+.suo
+Microsoft.PythonTools.AzureSetup.exe
+Microsoft.PythonTools.WebRole.dll
+web.config
+web.debug.config
+AzureSetup.cfg
+Microsoft.PythonTools.AzureSetup.exe.config
+wfastcgi.py
+__init__.py
+__main__.py
+attach_server.py
+crawler_server.pyproj.FileListAbsolute.txt
+visualstudio_py_debugger.py
+visualstudio_py_repl.py
+visualstudio_py_util.py
