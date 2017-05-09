@@ -44,12 +44,12 @@ def func_naver_search(search_word, start_page, end_page):
                 info = etc_list[2 * idx].get_text()
                 actor_info = etc_list[2 * idx + 1].get_text()
                 image_url = image_url_list[idx].get('src')
-                redirect_url = redirect_url_list[idx].get('href')
+                code = int(str(redirect_url_list[idx].get('href'))[-5:])
 
 
                 if cuser_cnt > 0:
                     total_title_list.append(cinema.Cinema(title, point, cuser_cnt, 
-                                                          info, actor_info, image_url, redirect_url))
+                                                          info, actor_info, image_url, code))
 
                 idx = idx + 1
 
@@ -75,11 +75,11 @@ def func_naver_search(search_word, start_page, end_page):
 
     return json_list
 
-def func_naver_search_one_cinema(redirect_url):
+def func_naver_search_one_cinema(redirect_code):
     crawler_instance = cinema_crawler.Crawler('http://movie.naver.com/',
                                             'movie/search/result.nhn?section=movie&query=',
                                             '')
-
+    redirect_url = 'http://movie.naver.com/movie/bi/mi/basic.nhn?code=' + str(redirect_code)
     try:
         soup = crawler_instance.setSoup(redirect_url, False)
 

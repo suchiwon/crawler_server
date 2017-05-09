@@ -3,10 +3,10 @@ from urllib.parse import quote
 import sys
 import os
 import json
-from operator import methodcaller
 
+##func 폴더의 사이트 crawl 관련 메소드 정의 python 파일을 import 하기 위한 경로.
+##sys에 경로를 추가하여 import
 base_path = os.path.dirname( os.path.abspath( __file__ ) )
-
 sys.path.insert(0, base_path + '\\func')
 
 import naver_search
@@ -25,6 +25,10 @@ def naver_search_request(request):
     end_page = int(request.GET.get('end_page')) if request.GET.get('end_page') else start_page
 
     title = str(request).split('=')[1].split('\'>')[0].split('&')[0]
+
+    #title = bytes(title,'utf-8').decode('utf-8')
+
+    #title = bytes(request.GET.get('title'),'utf-8').decode('utf-8')
 
     if (start_page <= 0):
         start_pqge = 1
@@ -71,10 +75,15 @@ def comment_search_request(request):
     #comment_result_list = []
     comment_result_list = '['
 
-    title = bytes(request.GET.get('title'),'utf-8').decode('utf-8')
-    redirect_url = request.GET.get('redirectURL')
+    #encoded_title = str(request).split('title=')[1].split('&')[0].eplit('\'>')[0]
 
-    comment_result_list += naver_search.func_naver_search_one_cinema(redirect_url)
+    print(request.GET.get('title'))
+
+    title = bytes(request.GET.get('title'),'utf-8').decode('utf-8')
+    #title = bytes(encoded_title,'utf-8').decode('utf-8')
+    redirect_code = request.GET.get('code')
+
+    comment_result_list += naver_search.func_naver_search_one_cinema(redirect_code)
     comment_result_list += ','
     comment_result_list += daum_search.func_daum_search(title)
     comment_result_list += ','

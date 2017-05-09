@@ -6,14 +6,14 @@ class JSONEncodable(object):
 
 class Cinema(JSONEncodable):
     """영화의 정보 저장 클래스"""
-    def __init__(self, title, point, cuser_cnt, info, actor_info, image_url, redirect_url):
+    def __init__(self, title, point, cuser_cnt, info, actor_info, image_url, code):
         self.title = title
         self.point = point
         self.cuser_cnt = cuser_cnt
         self.info = info
         self.actor_info = actor_info
         self.image_url = image_url
-        self.redirect_url = redirect_url
+        self.code = code
 
     def __repr__(self):
         return '{}: {} {} {} {} {} {} {}'.format(self.__class__.__name__,
@@ -23,7 +23,7 @@ class Cinema(JSONEncodable):
                                                     self.info,
                                                     self.actor_info,
                                                     self.image_url,
-                                                    self.redirect_url)
+                                                    self.code)
 
     def __cmp__(self, other):
         if hasattr(other, 'cuser_cnt'):

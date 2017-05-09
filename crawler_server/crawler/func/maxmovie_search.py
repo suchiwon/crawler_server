@@ -12,7 +12,7 @@ def func_maxmovie_search(movie_name):
     print(crawler_instance.getPullUrl())
 
     try:
-        redirect_url = crawler_instance.getRedirctUrl('p.sage > a.ag_4', False, False)
+        redirect_url = crawler_instance.getRedirctUrl('p.sage > a', False, False)
 
         soup = crawler_instance.setSoup(redirect_url, True)
 

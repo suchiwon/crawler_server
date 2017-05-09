@@ -23,6 +23,9 @@ class Crawler:
         return self.base_url + self.follow_url + self.search_word
 
     def setSoup(self, url, is_use_driver):
+
+        if url.find('NULLTAG') >= 0:
+            return ''
         if is_use_driver == False:
             source_code = requests.get(url)
 
@@ -49,6 +52,8 @@ class Crawler:
         self.setSoup(self.getPullUrl(), is_use_driver)
 
         redirect_list = self.soup.select(tag)
+
+        re_url = 'NULLTAG'
 
         if len(redirect_list) > 0:
             re_url = redirect_list[0]['href']
