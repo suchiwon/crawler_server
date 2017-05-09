@@ -45,7 +45,7 @@ def func_naver_search(title, start_page, end_page):
 
         plain_text = source_code.text
 
-        provision = cinema.Provision()
+        provision = cinema.CinemasProvision()
 
         #print(plain_text)
 

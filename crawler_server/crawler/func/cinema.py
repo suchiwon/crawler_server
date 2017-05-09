@@ -30,8 +30,27 @@ class Cinema(JSONEncodable):
     def getKey(self):
         return self.cuser_cnt
 
-class Provision(JSONEncodable):
+class CinemasProvision(JSONEncodable):
     def __init__(self):
         self.ID = None
         self.Type = None
         self.Cinemas = []
+
+class Comment(JSONEncodable):
+    """영화의 댓글 정보 클래스"""
+    def __init__(self, user_id, comment, point):
+        self.user_id = user_id
+        self.comment = comment
+        self.point = point
+
+    def __repr__(self):
+        return '{}: {} {} {}'.format(self.__class__.__name__,
+                                        self.user_id,
+                                        self.comment,
+                                        self.point)
+
+class CommentsProvision(JSONEncodable):
+    def __init__(self, url, point, comments):
+        self.url =  url
+        self.point = point
+        self.comments = comments                          
