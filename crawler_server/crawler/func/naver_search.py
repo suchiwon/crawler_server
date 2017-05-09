@@ -5,6 +5,8 @@ import cinema
 
 def func_naver_search(search_word, start_page, end_page):
 
+    encode_byte = str(bytes(search_word,'euc-kr'))
+
     crawler_instance = cinema_crawler.Crawler('http://movie.naver.com/',
                                             'movie/search/result.nhn?section=movie&query=',
                                             search_word)

@@ -24,7 +24,7 @@ def naver_search_request(request):
     start_page = int(request.GET.get('start_page')) if request.GET.get('start_page') else 1
     end_page = int(request.GET.get('end_page')) if request.GET.get('end_page') else start_page
 
-    title = bytes(request.GET.get('title'),'utf-8').decode('utf-8')
+    title = str(request).split('=')[1].split('\'>')[0].split('&')[0]
 
     if (start_page <= 0):
         start_pqge = 1
