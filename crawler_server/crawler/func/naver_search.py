@@ -44,7 +44,7 @@ def func_naver_search(search_word, start_page, end_page):
                 info = etc_list[2 * idx].get_text()
                 actor_info = etc_list[2 * idx + 1].get_text()
                 image_url = image_url_list[idx].get('src')
-                code = int(str(redirect_url_list[idx].get('href'))[-5:])
+                code = int(str(redirect_url_list[idx].get('href')).split('=')[1])
 
 
                 if cuser_cnt > 0:
@@ -86,17 +86,34 @@ def func_naver_search_one_cinema(redirect_code):
         #provision = crawler_instance.makeCommentsProvision(redirect_url, soup, 'div.star_score > em', 'div.score_reple > dl > dt > em',
         #                                                   'div.score_reple > p',
         #                                                   'div.star_score > em','div.score_reple > dl > dt > em', 2, 1)
+        cinema_point_list = []
+        user_point_list = []
+        user_id_list = []
+        review_list = []
+        datetime_list = []                                        
+        
+        if soup != None:
+            cinema_point_list = soup.select('div.star_score > em')
+            user_point_list = soup.select('div.star_score > em')
+            user_id_list = soup.select('div.score_reple > dl > dt > em > a > span')
+            review_list = soup.select('div.score_reple > p')
+            datetime_list = soup.select('div.score_reple > dl > dt > em')
 
-        cinema_point_list = soup.select('div.star_score > em')
-        user_point_list = soup.select('div.star_score > em')
-        user_id_list = soup.select('div.score_reple > dl > dt > em > a > span')
-        review_list = soup.select('div.score_reple > p')
-        datetime_list = soup.select('div.score_reple > dl > dt > em')
+        cinema_point = -1
 
-        cinema_point = 0
+        cinema_point_idx_offset = 0
 
         if len(cinema_point_list) > 0:
-            cinema_point = float(cinema_point_list[8].get_text().strip())
+            while cinema_point < len(cinema_point_list):
+                point_text = cinema_point_list[cinema_point_idx_offset].get_text().strip()
+
+                if len(point_text) > 1:
+                    cinema_point = float(point_text)
+                    break
+
+                cinema_point_idx_offset += 1
+            else:
+                cinema_point = 0
             print(cinema_point)
 
         idx = 0
@@ -104,7 +121,8 @@ def func_naver_search_one_cinema(redirect_code):
         total_comment_list = []
 
         while idx < len(user_id_list):
-            user_point = user_point_list[idx + 10].get_text()
+            if len(user_point_list) > idx + cinema_point_idx_offset + 2:
+                user_point = int(user_point_list[idx + cinema_point_idx_offset + 2].get_text())
             user_id = user_id_list[idx].get_text().strip()
             review = review_list[idx].get_text().strip()
             datetime = datetime_list[idx * 2 + 1].get_text().strip()

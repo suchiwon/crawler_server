@@ -8,6 +8,8 @@ import cinema
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from operator import methodcaller
+from operator import eq
+#from pyvirtualdisplay import Display
 
 base_path = os.path.dirname( os.path.abspath( __file__ ) )
 
@@ -18,14 +20,15 @@ class Crawler:
         self.base_url = base_url
         self.follow_url = follow_url
         self.search_word = search_word
+        #self.display = Display(visible = 0, size=(800,600))
 
     def getPullUrl(self):
         return self.base_url + self.follow_url + self.search_word
 
     def setSoup(self, url, is_use_driver):
 
-        if url.find('NULLTAG') >= 0:
-            return ''
+        if url.find('about:blank') >= 0:
+            return None
         if is_use_driver == False:
             source_code = requests.get(url)
 
@@ -33,6 +36,7 @@ class Crawler:
             self.soup = BeautifulSoup(plain_text, 'lxml')
 
         else:
+            #self.display.start()
             driver = webdriver.Chrome(base_path + '\\chromedriver.exe')
             driver.implicitly_wait(10)
 
@@ -41,24 +45,35 @@ class Crawler:
 
             self.soup = BeautifulSoup(plain_text, 'lxml')
 
-            driver.close()
+            driver.quit()
+            #self.display.stop()
 
         return self.soup
 
     def getSelector(self, tag):
         return self.soup.select(tag)
 
-    def getRedirctUrl(self, tag, is_use_driver, is_use_base_url):
+    def getRedirctUrl(self, tag, title_tag, is_use_driver, is_use_base_url):
         self.setSoup(self.getPullUrl(), is_use_driver)
 
         redirect_list = self.soup.select(tag)
+        title_list = self.soup.select(title_tag)
 
-        re_url = 'NULLTAG'
+        re_url = 'about:blank'
 
-        if len(redirect_list) > 0:
-            re_url = redirect_list[0]['href']
+        split_search_word = self.search_word.replace(' ','').split('(')[0].split(':')[0]
 
-        if is_use_base_url == True:
+        if len(title_list) > 0:
+            idx = 0
+            while idx < len(title_list):
+                split_title = title_list[idx].get_text().replace(' ','').split('(')[0].split(':')[0]
+                if eq(split_search_word, split_title) == True:
+                    re_url = redirect_list[idx].get('href')
+                    break
+                idx += 1
+
+
+        if is_use_base_url == True and re_url.find('about:blank') < 0:
             return self.base_url + re_url
         else:
             return re_url
@@ -73,13 +88,21 @@ class Crawler:
     def makeCommentsProvision(self, site_type, url, soup, 
                               cinema_point_tag, user_id_tag, review_tag, user_point_tag, datetime_tag,
                               point_idx_offset, point_div):
-        cinema_point_list = soup.select(cinema_point_tag)
-        user_point_list = soup.select(user_point_tag)
-        user_id_list = soup.select(user_id_tag)
-        review_list = soup.select(review_tag)
-        datetime_list = soup.select(datetime_tag)
 
-        cinema_point = 0
+        cinema_point_list = []
+        user_point_list = []
+        user_id_list = []
+        review_list = []
+        datetime_list = []                                        
+        
+        if soup != None:
+            cinema_point_list = soup.select(cinema_point_tag)
+            user_point_list = soup.select(user_point_tag)
+            user_id_list = soup.select(user_id_tag)
+            review_list = soup.select(review_tag)
+            datetime_list = soup.select(datetime_tag)
+
+        cinema_point = -1
 
         if len(cinema_point_list) > 0:
             cinema_point = float(cinema_point_list[0].get_text().strip())/point_div

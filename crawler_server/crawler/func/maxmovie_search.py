@@ -3,6 +3,8 @@
 import cinema_crawler
 import cinema
 
+from operator import eq
+
 def func_maxmovie_search(movie_name):
 
     crawler_instance = cinema_crawler.Crawler('http://search.maxmovie.com',
@@ -12,7 +14,19 @@ def func_maxmovie_search(movie_name):
     print(crawler_instance.getPullUrl())
 
     try:
-        redirect_url = crawler_instance.getRedirctUrl('p.sage > a', False, False)
+        redirect_url = crawler_instance.getRedirctUrl('p.sage > a' ,'p.sage > a', False, False)
+
+        cinema_point_list = crawler_instance.getSelector('span.sstar')
+
+        cinema_point = -1
+
+        if len(cinema_point_list) > 0 and redirect_url.find('about:blank') < 0:
+            point_text = cinema_point_list[0].get_text()
+            if eq(point_text,'\xa0') == True:
+                cinema_point = 0
+            else:
+                cinema_point = float(cinema_point_list[0].get_text())
+            print(cinema_point)
 
         soup = crawler_instance.setSoup(redirect_url, True)
 
@@ -23,20 +37,17 @@ def func_maxmovie_search(movie_name):
         #                                                   'div#content-center > table > tbody > tr > td > a > font:not(.font_or)',
         #                                                   'div#content-center > table > tbody > tr > td > a > font.font_or'
         #                                                   ,'div#content-center > table > tbody > tr > td.font_br.s',
-        #                                                   0, 1)
+        #                                                   0, 1)     
+        user_point_list = []
+        user_id_list = []
+        review_list = []
+        datetime_list = []                                        
         
-        
-        cinema_point_list = soup.select('div.myDetailTxt_point > font.font_rdB.b')
-        user_point_list = soup.select('div#content-center > table > tbody > tr > td > a > font.font_or')
-        user_id_list = soup.select('div#content-center > table > tbody > tr > td > font')
-        review_list = soup.select('div#content-center > table > tbody > tr > td > a > font')
-        datetime_list = soup.select('div#content-center > table > tbody > tr > td.font_br.s')
-
-        cinema_point = 0
-
-        if len(cinema_point_list) > 0:
-            cinema_point = float(cinema_point_list[0].get_text().strip())
-            print(cinema_point)
+        if soup != None:
+            user_point_list = soup.select('div#content-center > table > tbody > tr > td > a > font.font_or')
+            user_id_list = soup.select('div#content-center > table > tbody > tr > td > font')
+            review_list = soup.select('div#content-center > table > tbody > tr > td > a > font')
+            datetime_list = soup.select('div#content-center > table > tbody > tr > td.font_br.s')
 
         idx = 0
 

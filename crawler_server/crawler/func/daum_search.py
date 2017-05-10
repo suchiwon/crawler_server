@@ -13,7 +13,7 @@ def func_daum_search(movie_name):
     print(crawler_instance.getPullUrl())
 
     try:
-        redirect_url = crawler_instance.getRedirctUrl('a.link_join', True, True)
+        redirect_url = crawler_instance.getRedirctUrl('a.link_join', 'strong.tit_join', True, True)
 
         soup = crawler_instance.setSoup(redirect_url, True)
 
