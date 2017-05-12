@@ -2,7 +2,10 @@ from django.conf.urls import url
 
 from . import views
 
-"""각 사이트의 한 영화의 정보(평점, 댓글), 네이버 기반 영화명 검색 리스트를 가져오는 request용 url 맵핑"""
+"""
+author: suchiwon
+각 사이트의 한 영화의 정보(평점, 댓글), 네이버 기반 영화명 검색 리스트를 가져오는 request용 url 맵핑
+"""
 urlpatterns = [
     url(r'^$', views.index, name='index'),                                                          #기본 페이지. 사용하지 않음.
     url(r'^naver_search',views.naver_search_request, name='naver_search'),                          #네이버의 영화 검색 리스트를 crawling해서 받아오는 기능 url
