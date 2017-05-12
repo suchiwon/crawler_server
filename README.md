@@ -36,8 +36,8 @@ chrome driver를 사용한다.  즉, 웹 서버가 영화 정보를 요청 하�
 ![crawling method](https://cloud.githubusercontent.com/assets/17040334/25982483/d1fa8b5c-3717-11e7-8f8e-53973bd76a1f.PNG)
 
 ## 서버 실행 방법
-  1. git의 프로젝트 다운
-  2. python을 통해 서버 실행
-  3. Onx 웹 서버 실행
-  4. http://[server ip]:8080/Onx/ 접근 후 사용
-  @ 웹 페이지에 대한 기능은 Onx 프로젝트 README 참조
+  1. git의 프로젝트 다운  
+  2. python 또는 Visual Studio for Python 을 통해 서버 실행  
+  3. Onx 웹 서버 실행  
+  4. http://[server ip]:8080/Onx/ 접근 후 사용  
+  @ 웹 페이지에 대한 기능은 Onx 프로젝트 README 참조  
